@@ -1,0 +1,41 @@
+server:
+  port: 8080
+
+spring:
+  datasource:
+    username: root
+    password: zhibinNB6
+    url: jdbc:mysql://mike.jabingp.cn:3306/pwashop?useUnicode=true&characterEncoding=utf8&useSSL=true&serverTimezone=Hongkong
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      minimum-idle: 1
+      maximum-pool-size: 2
+      #      max-lifetime: 1800000
+      #      auto-commit: true
+      #      idle-timeout: 30000
+      #      pool-name: DatebookHikariCP
+      #      max-lifetime: 1800000
+      #      connection-timeout: 10000
+      #      connection-test-query: SELECT 1
+
+# fastdep-shiro-jwt配置
+fastdep:
+  shiro-jwt:
+    filter:
+      front:
+        path: /front/**
+        role: anon  #不拦截
+      api:
+        path: /api/v1/**
+        role: jwt #拦截
+    secret: 6Dx8SIuaHXJYnpsG18SSpjPs50lZcT52
+    expireTime: 7200000 # token有效期
+    prefix: ""  # token校验时的前缀
+    signPrefix: "" # token生成签名的前缀
+    header: "Authorization" # token校验时的header头
+
+# mybatis配置
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  configuration:
+    map-underscore-to-camel-case: true

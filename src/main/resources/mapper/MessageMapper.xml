@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.akuma.chat.dao.MessageDao">
+    <!-- 目的：为dao接口方法提供sql语句配置 -->
+
+    <!--发送消息-->
+    <insert id="insertMessage" parameterType="com.akuma.chat.model.entity.Message" keyProperty="mid">
+        INSERT INTO
+            message(sender_id,receiver_id,content,send_time,status)
+        VALUES
+            (#{senderId},#{receiverId},#{content},#{sendTime},#{status})
+    </insert>
+
+    <!--  查询消息聊天好友列表  -->
+    <select id="getMessageUserList" resultType="com.akuma.chat.model.entity.User">
+        SELECT
+            DISTINCT u_name,u_id
+        FROM
+            users JOIN message ON (users.u_id=message.sender_id OR users.u_id=message.receiver_id)
+        WHERE
+            users.u_id!=#{uId} AND (message.receiver_id=#{uId} OR message.sender_id=#{uId})
+        LIMIT
+            10
+    </select>
+
+    <!--  查询消息列表  -->
+    <select id="getMessage" resultType="com.akuma.chat.model.entity.Message">
+        SELECT
+            *
+        FROM
+            message
+        WHERE
+            (sender_id=#{uId} AND receiver_id=#{receiverId}) OR (sender_id=#{receiverId} AND receiver_id=#{uId})
+    </select>
+
+</mapper>
